@@ -3,6 +3,10 @@ import orquidarioImg from '../assets/orquidarioLilas.png';
 import bikcraftImg from '../assets/bikcraft.png';
 import caotinhoImg from '../assets/caotinhoFeliz.png';
 import rodoSOSImg from '../assets/rodoSOS.png';
+import newYorkImg from '../assets/New_york.png';
+import gelatinaRoyalImg from '../assets/gelatina_Royal.png';
+import ebookImg from '../assets/Ebook.png';
+import animaisFantasticosImg from '../assets/animais_fantasticos.png';
 
 const projectsData = [
   {
@@ -44,7 +48,50 @@ const projectsData = [
     image: rodoSOSImg,
     link: 'https://reginacupa.github.io/RodoSOS/',
     theme: 'theme-light'
+  },
+  {
+    number: '05',
+    title: 'New York',
+    category: 'Design & Front-End',
+    description: 'Projeto de front-end inspirado na atmosfera de Nova York, com uma proposta visual imersiva que explora composição editorial, tipografia, imagens e navegação para transformar a descoberta da cidade em uma experiência digital.',
+    techs: ['HTML', 'CSS', 'JavaScript', 'GSAP'],
+    image: newYorkImg,
+    link: 'https://reginacupa.github.io/New_York/',
+    theme: 'theme-dark'
+  },
+  {
+    number: '06',
+    title: 'Gelatina Royal',
+    category: 'Experiência Interativa / Front-End',
+    description:'Uma experiência interativa de front-end que explora animações com GSAP, transições entre sabores e efeitos visuais dinâmicos. O projeto combina criatividade, movimento e interatividade para transformar uma apresentação de produto em uma experiência digital envolvente.',
+    techs: ['HTML', 'CSS', 'JavaScript', 'GSAP'],
+    image: gelatinaRoyalImg,
+    link: 'https://reginacupa.github.io/GelatinaRoyal/',
+    theme: 'theme-light'
+  },
+  {
+    number: '07',
+    title: 'Ebook VIP',
+    category: 'Landing Page / Design & Front-End',
+    description:'Uma landing page desenvolvida para apresentar um ebook sobre arquitetura de software na era do Vibe Coding. O projeto combina identidade visual contemporânea, hierarquia de informações e uma experiência de navegação intuitiva, explorando princípios de UI/UX, desenvolvimento front-end e estratégias de conversão.',
+    techs: ['HTML', 'CSS', 'JavaScript', 'GSAP'],
+    image: ebookImg,
+    link: 'https://reginacupa.github.io/Ebook-VIP/',
+    theme: 'theme-dark'
+  },
+  {
+    number: '08',
+    title: 'Animais Fantásticos',
+    category: 'Web Interativa / Front-End',
+    description:'Projeto de front-end com uma proposta editorial e educativa sobre o universo dos animais. Explora a organização de conteúdo, a interação com JavaScript e a composição visual de imagens e tipografia para criar uma experiência de navegação envolvente.',
+    techs: ['HTML', 'CSS', 'JavaScript'],
+    image: animaisFantasticosImg,
+    link: 'https://reginacupa.github.io/animais-fantasticos/',
+    theme: 'theme-light'
   }
+
+
+
 ];
 
 const Projects = () => {
