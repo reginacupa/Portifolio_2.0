@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import orquidarioImg from '../assets/orquidarioLilas.png';
 import bikcraftImg from '../assets/bikcraft.png';
 import caotinhoImg from '../assets/caotinhoFeliz.png';
@@ -89,65 +89,257 @@ const projectsData = [
     link: 'https://reginacupa.github.io/animais-fantasticos/',
     theme: 'theme-light'
   }
-
-
-
 ];
 
 const Projects = () => {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const trackRef = useRef(null);
+  const isProgrammaticScrollRef = useRef(false);
+  const scrollTimeoutRef = useRef(null);
+
+  const scrollToIndex = useCallback((index) => {
+    if (index < 0 || index >= projectsData.length) return;
+    const track = trackRef.current;
+    if (!track) return;
+
+    isProgrammaticScrollRef.current = true;
+    setActiveIndex(index);
+
+    const slides = track.querySelectorAll('.project-slide');
+    const targetSlide = slides[index];
+    const targetLeft = targetSlide ? targetSlide.offsetLeft : index * track.clientWidth;
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    
+    track.scrollTo({
+      left: targetLeft,
+      behavior: prefersReduced ? 'auto' : 'smooth'
+    });
+
+    if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
+    scrollTimeoutRef.current = setTimeout(() => {
+      isProgrammaticScrollRef.current = false;
+    }, 750);
+  }, []);
+
+  const handlePrev = useCallback(() => {
+    if (activeIndex > 0) {
+      scrollToIndex(activeIndex - 1);
+    }
+  }, [activeIndex, scrollToIndex]);
+
+  const handleNext = useCallback(() => {
+    if (activeIndex < projectsData.length - 1) {
+      scrollToIndex(activeIndex + 1);
+    }
+  }, [activeIndex, scrollToIndex]);
+
+  const handleKeyDown = useCallback((e) => {
+    if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      handlePrev();
+    } else if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      handleNext();
+    }
+  }, [handlePrev, handleNext]);
+
+  // Sincroniza o slide ativo com scroll manual (swipe por toque ou trackpad)
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+
+    let ticking = false;
+
+    const handleScroll = () => {
+      if (isProgrammaticScrollRef.current) return;
+
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          if (!track) return;
+          const scrollLeft = track.scrollLeft;
+          const width = track.clientWidth;
+          if (width > 0) {
+            const calculatedIndex = Math.round(scrollLeft / width);
+            const clampedIndex = Math.max(0, Math.min(projectsData.length - 1, calculatedIndex));
+            setActiveIndex(clampedIndex);
+          }
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    track.addEventListener('scroll', handleScroll, { passive: true });
+    return () => track.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Notifica o gerenciador de background editorial sobre a alternância de tema
+  useEffect(() => {
+    window.dispatchEvent(new Event('scroll'));
+  }, [activeIndex]);
+
+  const currentProject = projectsData[activeIndex];
+
   return (
-    <div id="projetos">
-      {projectsData.map((project, index) => (
-        <section key={index} className={`${project.theme}`}>
-          <div className={`project-item ${index % 2 !== 0 ? 'alternate' : ''}`}>
-            
-            <div className="project-meta-side">
-              <div className="project-number">{project.number}</div>
-              <span className="project-category">{project.category}</span>
-              <h3 className="project-title">{project.title}</h3>
-              <p className="project-description body-paragraph">
-                {project.description}
-              </p>
-              
-              <ul className="project-tech-list">
-                {project.techs.map((tech, i) => (
-                  <li key={i} className="project-tech-tag">{tech}</li>
-                ))}
-              </ul>
+    <section 
+      id="projetos" 
+      className={`projects-editorial-section ${currentProject.theme}`}
+      onKeyDown={handleKeyDown}
+      tabIndex={0}
+      aria-label="Carrossel Editorial de Projetos"
+      aria-roledescription="carousel"
+    >
+      {/* Barra Editorial Superior */}
+      <div className="editorial-carousel-top-bar">
+        <div className="carousel-top-meta">
+          <span className="section-label">Projetos Selecionados</span>
+          <span className="carousel-top-divider" aria-hidden="true">|</span>
+          <span className="carousel-category-indicator">{currentProject.category}</span>
+        </div>
 
-              
-            </div>
-
-            <div className="project-detail-side">
-              <a 
-                href={project.link} 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="project-image-link"
-                aria-label={`Visitar projeto ${project.title}`}
-              >
-                <div className="project-detail-frame">
-                  <div className="project-corner-bracket bracket-tl"></div>
-                  <div className="project-corner-bracket bracket-tr"></div>
-                  <div className="project-corner-bracket bracket-bl"></div>
-                  <div className="project-corner-bracket bracket-br"></div>
-                  
-                  <img 
-                    src={project.image} 
-                    alt={`Composição editorial do projeto ${project.title}`} 
-                    className="project-cover-image"
-                  />
-                  <div className="project-badge-visit">
-                    <span>VISITAR PROJETO ↗</span>
-                  </div>
-                </div>
-              </a>
-            </div>
-
+        <div className="carousel-status-cluster">
+          <div className="carousel-counter" aria-live="polite" aria-atomic="true">
+            <span className="carousel-counter-current">{currentProject.number}</span>
+            <span className="carousel-counter-separator">/</span>
+            <span className="carousel-counter-total">0{projectsData.length}</span>
           </div>
-        </section>
-      ))}
-    </div>
+
+          <div className="carousel-arrows-cluster">
+            <button
+              type="button"
+              className="carousel-nav-arrow prev"
+              onClick={handlePrev}
+              disabled={activeIndex === 0}
+              aria-label="Projeto anterior"
+              title="Projeto anterior"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+              </svg>
+            </button>
+            <button
+              type="button"
+              className="carousel-nav-arrow next"
+              onClick={handleNext}
+              disabled={activeIndex === projectsData.length - 1}
+              aria-label="Próximo projeto"
+              title="Próximo projeto"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Trilho Horizontal com Scroll Snap e Setas Laterais Desktop */}
+      <div className="projects-carousel-wrapper">
+        <button
+          type="button"
+          className="carousel-side-nav-btn prev"
+          onClick={handlePrev}
+          disabled={activeIndex === 0}
+          aria-label="Voltar para o projeto anterior"
+          title="Projeto anterior"
+        >
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </button>
+
+        <div className="projects-carousel-track" ref={trackRef}>
+          {projectsData.map((project, index) => (
+            <div 
+              key={index} 
+              className={`project-slide ${project.theme}`}
+              role="group"
+              aria-roledescription="slide"
+              aria-label={`${project.number} de 08: ${project.title}`}
+              aria-hidden={activeIndex !== index}
+            >
+              <div className={`project-item ${index % 2 !== 0 ? 'alternate' : ''}`}>
+                <div className="project-meta-side">
+                  <div className="project-number">{project.number}</div>
+                  <span className="project-category">{project.category}</span>
+                  <h3 className="project-title">{project.title}</h3>
+                  <p className="project-description body-paragraph">
+                    {project.description}
+                  </p>
+                  
+                  <ul className="project-tech-list">
+                    {project.techs.map((tech, i) => (
+                      <li key={i} className="project-tech-tag">{tech}</li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="project-detail-side">
+                  <a 
+                    href={project.link} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="project-image-link"
+                    aria-label={`Visitar projeto ${project.title}`}
+                    tabIndex={activeIndex === index ? 0 : -1}
+                  >
+                    <div className="project-detail-frame">
+                      <div className="project-corner-bracket bracket-tl"></div>
+                      <div className="project-corner-bracket bracket-tr"></div>
+                      <div className="project-corner-bracket bracket-bl"></div>
+                      <div className="project-corner-bracket bracket-br"></div>
+                      
+                      <img 
+                        src={project.image} 
+                        alt={`Composição editorial do projeto ${project.title}`} 
+                        className="project-cover-image"
+                        loading={index === 0 ? "eager" : "lazy"}
+                      />
+                      <div className="project-badge-visit">
+                        <span>VISITAR PROJETO ↗</span>
+                      </div>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <button
+          type="button"
+          className="carousel-side-nav-btn next"
+          onClick={handleNext}
+          disabled={activeIndex === projectsData.length - 1}
+          aria-label="Avançar para o próximo projeto"
+          title="Próximo projeto"
+        >
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+      </div>
+
+      {/* Indicadores Clicáveis Diretos de Navegação */}
+      <div className="carousel-editorial-pagination" role="tablist" aria-label="Navegar diretamente pelos projetos">
+        {projectsData.map((proj, idx) => (
+          <button
+            key={idx}
+            type="button"
+            role="tab"
+            aria-selected={activeIndex === idx}
+            aria-label={`Projeto ${proj.number}: ${proj.title}`}
+            className={`carousel-pagination-pill ${activeIndex === idx ? 'active' : ''}`}
+            onClick={() => scrollToIndex(idx)}
+          >
+            <span className="pagination-pill-num">{proj.number}</span>
+            <span className="pagination-pill-bar"></span>
+          </button>
+        ))}
+      </div>
+    </section>
   );
 };
 
