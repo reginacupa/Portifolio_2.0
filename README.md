@@ -1,86 +1,140 @@
-# Regina Cupa — Portfólio & Currículo Editorial
+# Regina Cupa — Portfólio Editorial & Currículo Digital
 
-Este é o projeto de redesign do portfólio pessoal e currículo digital de Regina Cupa, desenvolvido na interseção entre design visual refinado e código moderno. O visual é inspirado em uma direção de arte editorial sofisticada (estilo Vogue/revista) com alto contraste, grandes espaços vazios e pinceladas de tinta expressivas.
+Portfólio profissional e currículo interativo de **Regina Cupa**, desenvolvido na interseção entre design visual refinado e engenharia de software moderna. A interface é concebida a partir de uma direção de arte editorial contemporânea (inspiração em publicações premium e ritmo visual sofisticado), combinando alto contraste, tipografia elegante e elementos gráficos expressivos.
 
 ---
 
 ## 📖 Visão Geral
 
-O projeto foi reestruturado utilizando **React + Vite** com o objetivo de demonstrar alta competência técnica e de design para recrutadores e clientes. Ele substitui a antiga estrutura estática por um sistema de componentes modular, interativo e com excelente performance.
+O projeto foi construído utilizando **React** e **Vite**, estruturado em componentes modulares, responsivos e de alto desempenho. A aplicação oferece uma experiência imersiva e fluida para recrutadores e clientes.
 
-### Principais Características
-* **Estética Premium:** Paleta com Ink Black, Warm Ivory, detalhes em Burgundy (pinceladas expressivas) e Aged Gold (1-3% de detalhes metálicos).
-* **Ritmo Editorial:** Alternância intencional entre fundos escuros dramáticos e áreas claras com tipografia sofisticada.
-* **Componentes React:** Interface modular e de fácil manutenção dividida em seções.
-* **Responsividade Art-Directed:** Layout que se adapta de forma fluida a dispositivos móveis sem perder o rigor da tipografia.
-
----
-
-## ⚙️ Estrutura do Projeto
-
-O workspace está organizado de forma profissional na raiz do repositório:
-* **`/src`:** Código-fonte da aplicação React (componentes, estilos e assets otimizados).
-* **`/public`:** Arquivos estáticos servidos diretamente (ícones e favicon).
-* **`/docs`:** Documentações de arquitetura, briefing e design system editorial.
-* **`/dist`:** Pasta autogerada pelo build contendo os arquivos otimizados para produção.
-* **`index.html`:** Ponto de entrada da aplicação.
-* **`package.json` & `vite.config.js`:** Configurações do npm e Vite.
+### Destaques e Funcionalidades
+* **Direção de Arte Editorial:** Paleta sofisticada com *Ink Black*, *Warm Ivory*, pinceladas em *Burgundy* e detalhes refinados em *Aged Gold*.
+* **Carrossel Editorial Horizontal:** Navegação horizontal suave para os oito projetos em destaque, baseada em **CSS Scroll Snap** nativo (`scroll-snap-type: x mandatory`).
+* **Experiência de Navegação Intuitiva:**
+  * Apresentação focada de um projeto completo por vez.
+  * Setas laterais discretas com desabilitação automática nos limites.
+  * Indicador numérico dinâmico de posição (`01 / 08` a `08 / 08`).
+  * Indicadores clicáveis para acesso direto a qualquer projeto.
+  * Suporte multiplataforma: gestos de toque/swipe no mobile e tablet, rolagem por trackpad/mouse no desktop e navegação acessível por teclado (setas `←` e `→`).
+  * **Livre Scroll Vertical:** A rolagem vertical principal da página permanece 100% desimpedida.
+* **Alternância de Tema:** Transição dinâmica e harmoniosa de fundo e contraste entre temas claros e escuros conforme o projeto ativo ou a seção em visualização.
+* **Arquitetura Leve e Nativa:** Recursos construídos sem bibliotecas externas pesadas, preservando velocidade de carregamento e acessibilidade.
 
 ---
 
-## 🚀 Instalação e Desenvolvimento
+## 🛠️ Tecnologias Utilizadas
 
-Para rodar o projeto localmente:
+* **React 19** — Biblioteca para construção de interfaces orientadas a componentes.
+* **Vite** — Build tool e ambiente de desenvolvimento ultrarrápido.
+* **CSS3 Moderno** — CSS Scroll Snap, CSS Grid, Flexbox, Custom Properties e transições nativas.
+* **Oxlint** — Linter de alta performance para validação e qualidade de código.
+* **GitHub Actions** — Pipeline automatizado de integração contínua e deploy no GitHub Pages.
+
+---
+
+## 📁 Estrutura do Projeto
+
+```text
+Portifolio_2.0/
+├── .github/
+│   └── workflows/
+│       └── deploy.yml          # Pipeline CI/CD para GitHub Pages
+├── docs/                       # Documentação de briefing e design system
+├── public/
+│   └── RE-favcon.svg           # Favicon vetorial da aplicação
+├── src/
+│   ├── assets/                 # Capas dos projetos, fotos e pinceladas
+│   ├── components/
+│   │   ├── About.jsx           # Seção sobre a profissional e filosofia
+│   │   ├── Contact.jsx         # Seção de contato e links
+│   │   ├── Education.jsx       # Formação acadêmica e certificações
+│   │   ├── Header.jsx          # Barra de navegação fixa com blur
+│   │   ├── Hero.jsx            # Apresentação inicial e chamada de ação
+│   │   ├── Projects.jsx        # Carrossel editorial horizontal dos 8 projetos
+│   │   ├── Skills.jsx          # Competências técnicas e ferramentas
+│   │   └── WhatsAppFloat.jsx   # Botão flutuante de atendimento WhatsApp
+│   ├── App.css                 # Estilos globais e componentes do design system
+│   ├── App.jsx                 # Composição principal e controle de tema dinâmico
+│   ├── index.css               # Reset, tipografias e variáveis base
+│   └── main.jsx                # Ponto de entrada do React
+├── .gitignore                  # Arquivos e diretórios ignorados pelo Git
+├── .oxlintrc.json              # Configurações do Oxlint
+├── index.html                  # HTML base da aplicação
+├── package.json                # Manifesto de dependências e scripts npm
+├── package-lock.json           # Lockfile determinístico de dependências
+├── vite.config.js              # Configuração do Vite e base path
+└── README.md                   # Documentação oficial do projeto
+```
+
+---
+
+## 🚀 Instalação e Execução Local
 
 ### Pré-requisitos
-* Node.js (versão 18 ou superior)
-* npm (gerenciador de pacotes padrão)
+* **Node.js** (versão 18 ou superior)
+* **npm** (gerenciador de pacotes incluso no Node.js)
 
-### Configuração do Ambiente
+### Passo a Passo
 
-1. Instale as dependências na raiz do repositório:
+1. **Clone o repositório:**
    ```bash
-   npm install
+   git clone https://github.com/reginacupa/Portifolio_2.0.git
+   cd Portifolio_2.0
    ```
 
-2. Inicie o servidor de desenvolvimento:
+2. **Instale as dependências (instalação limpa e reproduzível):**
+   ```bash
+   npm ci
+   ```
+
+3. **Inicie o servidor de desenvolvimento:**
    ```bash
    npm run dev
    ```
-   *O projeto estará disponível em http://localhost:5173.*
+   Acesse o endereço exibido no terminal (geralmente `http://localhost:5173/Portifolio_2.0/`).
 
----
-
-## 🛠️ Compilação e Build (Deploy Profissional)
-
-Quando estiver pronto para fazer o deploy em produção (ex: Vercel, Netlify ou GitHub Pages):
-
-1. Execute o comando de compilação:
+4. **Verificação de qualidade de código (Lint):**
    ```bash
-   npm run build
+   npm run lint
    ```
 
-2. Isso criará uma pasta chamada `/dist` na raiz, contendo todo o site otimizado para produção.
+---
 
-### Instruções de Deploy automático:
-* **Vercel / Netlify:** Basta conectar o seu repositório no GitHub. A plataforma detectará automaticamente que é um projeto Vite. Use as configurações padrões:
-  * **Build Command:** `npm run build`
-  * **Output Directory:** `dist`
-* **GitHub Pages:** Você pode publicar apontando o deploy para a pasta `/dist` ou usando uma GitHub Action de deploy para Vite.
+## 📦 Build e Preparação para Deploy
+
+Para gerar a versão otimizada de produção:
+
+```bash
+npm run build
+```
+
+Os arquivos compilados, minificados e otimizados serão gerados no diretório `/dist`.
+
+Para pré-visualizar localmente o build gerado:
+```bash
+npm run preview
+```
 
 ---
 
-## 📝 Guia de Contribuição
+## 🌐 Instruções de Deploy
 
-Para modificar o conteúdo do portfólio (como adicionar novos projetos, cursos ou alterar textos):
-1. Edite os dados nos respectivos componentes:
-   * **Projetos:** Edite a lista em `src/components/Projects.jsx`.
-   * **Formação e Idiomas:** Edite a lista em `src/components/Education.jsx`.
-   * **Habilidades:** Edite a lista em `src/components/Skills.jsx`.
-2. Salve os arquivos e execute `npm run build` para atualizar a pasta `/dist`.
+O projeto está configurado para deploy contínuo:
+
+### GitHub Pages (Configurado)
+O repositório inclui um workflow em `.github/workflows/deploy.yml` que compila o projeto com `npm ci` e `npm run build`, publicando automaticamente a pasta `dist` no GitHub Pages a cada push na branch `main`.
+
+* **Base Path:** O `vite.config.js` está configurado com `base: '/Portifolio_2.0/'`, garantindo que assets, scripts e fontes sejam resolvidos corretamente no GitHub Pages.
+
+### Outras Plataformas (Vercel / Netlify)
+Caso opte por hospedar em plataformas com domínio raiz próprio:
+* **Build Command:** `npm run build`
+* **Output Directory:** `dist`
+* *Nota:* Ajuste a propriedade `base` em `vite.config.js` para `'/'` caso utilize domínio customizado na raiz.
 
 ---
 
 ## ⚖️ Licença
 
-Este projeto está sob a licença [MIT](https://choosealicense.com/licenses/mit/). Sinta-se livre para usar, estudar e modificar o código.
+Projeto pessoal e autoral desenvolvido por **Regina Cupa**. Todos os direitos reservados.
